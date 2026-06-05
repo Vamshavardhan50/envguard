@@ -1,0 +1,61 @@
+# .goreleaser.yaml
+# Release configuration for goreleaser.
+
+version: 2
+
+project_name: envguard
+
+before:
+  hooks:
+    - go mod tidy
+    - go test ./...
+
+builds:
+  - env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+      - "386"
+    ignore:
+      - goos: windows
+        goarch: arm64
+      - goos: darwin
+        goarch: "386"
+    binary: envguard
+    ldflags:
+      - -s -w
+      - -X main.version={{.Version}}
+      - -X main.commit={{.Commit}}
+      - -X main.date={{.Date}}
+
+archives:
+  - format: tar.gz
+    name_template: "envguard_{{ .Os }}_{{ .Arch }}"
+    format_overrides:
+      - goos: windows
+        format: zip
+    files:
+      - README.md
+      - LICENSE
+      - CHANGELOG.md
+
+checksum:
+  name_template: "checksums.txt"
+
+release:
+  github:
+    owner: yourname
+    name: envguard
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^chore:"

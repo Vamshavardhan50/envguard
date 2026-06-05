@@ -1,0 +1,34 @@
+{
+  "name": "envguard",
+  "version": "1.0.0",
+  "description": "The ESLint for environment variables.",
+  "bin": {
+    "envguard": "bin/envguard.js"
+  },
+  "scripts": {
+    "postinstall": "node scripts/install.js"
+  },
+  "files": [
+    "bin/",
+    "scripts/",
+    "package.json"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vamshavardhan50/envguard.git"
+  },
+  "keywords": [
+    "env",
+    "environment",
+    "variables",
+    "audit",
+    "validate",
+    "guard"
+  ],
+  "author": "Vamshavardhan50",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Vamshavardhan50/envguard/issues"
+  },
+  "homepage": "https://github.com/Vamshavardhan50/envguard#readme"
+}

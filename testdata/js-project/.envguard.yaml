@@ -1,0 +1,32 @@
+version: 1
+
+scan:
+  paths:
+    - "."
+  ignore:
+    - "node_modules"
+    - ".git"
+    - "dist"
+    - "build"
+    - "vendor"
+    - ".goreleaser.yaml"
+  languages:
+    - "javascript"
+
+rules:
+  DATABASE_URL:
+    required: true
+    type: url
+    description: "Primary database connection string"
+  OLD_API_KEY:
+    required: true
+    type: string
+  PORT:
+    required: false
+    type: number
+    default: "3000"
+    description: "Server port"
+
+output:
+  format: pretty
+  exit_code: true
