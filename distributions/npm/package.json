@@ -1,5 +1,5 @@
 {
-  "name": "guardenv",
+  "name": "envguard-bin",
   "version": "1.0.0",
   "description": "The ESLint for environment variables.",
   "bin": {
