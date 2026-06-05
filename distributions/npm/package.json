@@ -1,6 +1,6 @@
 {
   "name": "envguard-bin",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "The ESLint for environment variables.",
   "bin": {
     "envguard": "bin/envguard.js"

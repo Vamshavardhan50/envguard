@@ -9,7 +9,7 @@ import tarfile
 import zipfile
 import subprocess
 
-VERSION = "1.0.2"
+VERSION = "1.0.3"
 OWNER = "Vamshavardhan50"
 REPO = "envguard"
 
