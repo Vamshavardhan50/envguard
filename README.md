@@ -34,13 +34,33 @@ Most development teams break production due to:
 
 ### Via NPM (Global)
 ```bash
-npm install -g envguard
+npm install -g envguard-bin
+```
+*Note: The NPM package is published as `envguard-bin` (to avoid naming collisions), but it registers the global command as `envguard`. Once installed, you can run `envguard` directly in your terminal.*
+
+### Via NPM (Local DevDependency)
+You can add `envguard` locally to a Node.js project:
+```bash
+npm install --save-dev envguard-bin
+```
+Once installed, you can use it in your `package.json` scripts:
+```json
+{
+  "scripts": {
+    "env:check": "envguard audit --ci"
+  }
+}
+```
+And run it with:
+```bash
+npm run env:check
 ```
 
 ### Via PIP
 ```bash
 pip install envguard
 ```
+*Note: Pip automatically configures the entrypoint command so you can run `envguard` immediately.*
 
 ### Via Go
 ```bash
