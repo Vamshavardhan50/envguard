@@ -1,10 +1,11 @@
 {
-  "name": "@vamsha50/envguard",
+  "name": "envguard-cli",
   "version": "1.0.0",
   "description": "The ESLint for environment variables.",
   "bin": {
     "envguard": "bin/envguard.js"
   },
+
   "scripts": {
     "postinstall": "node scripts/install.js"
   },
