@@ -49,7 +49,7 @@ checksum:
 
 release:
   github:
-    owner: yourname
+    owner: Vamshavardhan50
     name: envguard
 
 changelog:
