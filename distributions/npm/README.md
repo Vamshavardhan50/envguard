@@ -1,164 +1,105 @@
-# envguard
+# envguard 🛡️
 
 [![CI](https://github.com/Vamshavardhan50/envguard/actions/workflows/ci.yml/badge.svg)](https://github.com/Vamshavardhan50/envguard/actions/workflows/ci.yml)
 [![Release](https://github.com/Vamshavardhan50/envguard/actions/workflows/release.yml/badge.svg)](https://github.com/Vamshavardhan50/envguard/actions/workflows/release.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-> **The ESLint for environment variables.** Audits, validates, and protects environment variable configurations in any software project. Fast, offline, and zero-config to start.
+> **Think of `envguard` as a spell-checker/linter for your environment variables.** 
+> It scans your code, checks your `.env` files, and makes sure you never break your app in production due to a missing or misconfigured setting. It is fast, works 100% offline, and requires zero configuration to start.
 
 ---
 
-## Why envguard?
+## What is envguard?
+Have you ever deployed an app, only for it to immediately crash because you forgot to copy a new API key to the server? Or because someone configured `PORT` as a word instead of a number?
 
-Most development teams break production due to:
-- Missing environment variables in deployment.
-- Configuration drift between development, staging, and production.
-- No validation of environment variable types (e.g. string vs number) or formats.
-- Forgetting to keep `.env.example` templates updated.
-- Lack of continuous integration checks for environment state.
-
-**envguard** solves all of these with a single static binary. It acts as a static analysis tool for your configuration, verifying that what your code expects matches what is configured.
+`envguard` solves this by automatically finding all environment variables your code uses (like `process.env.DATABASE_URL` or `os.environ.get('PORT')`) and checking them against your `.env` configuration file. It warns you immediately about:
+- ❌ **Missing variables** that your code expects but are not configured.
+- ⚠️ **Unused variables** in `.env` that your code doesn't actually use.
+- 🚫 **Invalid formats** (e.g. database URLs that are not valid URLs, or ports that are not numbers).
 
 ---
 
-## Core Promises
+## ⚡ Quick 1-Minute Start
 
-- **Offline-First:** Never makes network requests. Runs 100% locally.
-- **Privacy-Engineered:** Never reads or logs actual environment values; it only parses and displays **key names**.
-- **Polyglot Scanner:** Auto-detects variable usages in JavaScript, TypeScript, Python, Go, Ruby, Rust, PHP, Java, Shell, and Dockerfiles.
-- **Zero Dependencies:** Compiles to a single static binary.
+Get up and running in three simple steps:
 
----
+### 1. Install it
+Run the install command for your favorite package manager:
 
-## Installation
-
-### Via NPM (Global)
 ```bash
+# Using Node (NPM)
 npm install -g envguard-bin
-```
-*Note: The NPM package is published as `envguard-bin` (to avoid naming collisions), but it registers the global command as `envguard`. Once installed, you can run `envguard` directly in your terminal.*
 
-### Via NPM (Local DevDependency)
-You can add `envguard` locally to a Node.js project:
-```bash
-npm install --save-dev envguard-bin
-```
-Once installed, you can use it in your `package.json` scripts:
-```json
-{
-  "scripts": {
-    "env:check": "envguard audit --ci"
-  }
-}
-```
-And run it with:
-```bash
-npm run env:check
-```
-
-### Via PIP
-```bash
+# Using Python (PIP)
 pip install envguard
-```
-*Note: Pip automatically configures the entrypoint command so you can run `envguard` immediately.*
 
-### Via Go
-```bash
+# Using Go
 go install github.com/Vamshavardhan50/envguard@latest
 ```
 
----
-
-## Command Reference
-
-### 1. `envguard audit`
-Scans your codebase for environment variable usage and compares it against a `.env` file to detect missing or unused variables.
+### 2. Set it up
+Run the setup wizard in your project folder. It will scan your project, find your environment variables, and create a safe configuration file (`.envguard.yaml`) for you:
 
 ```bash
-envguard audit [path] [flags]
+envguard init
 ```
 
-#### Flags
-- `--path string` - Path to scan (default `"."`)
-- `--env string` - Path to `.env` file (default `".env"`)
-- `--config string` - Path to `.envguard.yaml` (default `".envguard.yaml"`)
-- `--format string` - Output format: `pretty|json|github` (default `"pretty"`)
-- `--ci` - Exits with status `1` if any missing or unused variables are found.
-- `--ignore string` - Comma-separated list of paths to ignore.
-
----
-
-### 2. `envguard sync`
-Reads your local `.env` file and outputs an updated `.env.example` containing only the keys and stripping all secret values. It optionally appends key descriptions defined in `.envguard.yaml`.
+### 3. Guard your project
+Scan your project to find any discrepancies:
 
 ```bash
-envguard sync [flags]
+envguard audit
 ```
-
-#### Flags
-- `--env string` - Source `.env` file (default `".env"`)
-- `--output string` - Output template file (default `".env.example"`)
-- `--force` - Overwrite `.env.example` without asking for confirmation.
 
 ---
 
-### 3. `envguard diff`
-Compares key presence between two environment files without exposing their values. Useful for checking differences between `.env` and `.env.production`.
+## 🔒 Security & Privacy First
 
+- **100% Offline:** `envguard` never makes network requests and never uploads anything.
+- **Privacy-Engineered:** It only reads and displays the **names** of the keys (e.g. `STRIPE_API_KEY`). It **never** reads, logs, or prints the actual secret values.
+
+---
+
+## 🛠️ How to Use: Common Tasks
+
+Here is how to run `envguard`'s most common commands in your project:
+
+### 🔍 Find Missing or Unused Keys
+To check if your local `.env` file matches what your code actually uses, run:
 ```bash
-envguard diff <file1> <file2> [flags]
+envguard audit
 ```
-
-#### Flags
-- `--format string` - Output format: `pretty|json` (default `"pretty"`)
-- `--ci` - Exits with status `1` if there are any differences between the two files.
+*Tip: In your CI/CD pipelines, run `envguard audit --ci` to automatically fail build pipelines if keys are missing.*
 
 ---
 
-### 4. `envguard doctor`
-Performs a structural health check on your project's environment variables. It verifies file existence, gitignore rules, and flags potential raw production secrets in `.env` keys.
-
+### 🛡️ Check If Values Are Correct (Validation)
+You can define rules in `.envguard.yaml` (e.g., checking if `DATABASE_URL` is a valid URL, or `PORT` is a number). To validate your current configuration against these rules, run:
 ```bash
-envguard doctor [path] [flags]
+envguard validate
 ```
-
-#### Flags
-- `--path string` - Path to check (default `"."`)
-- `--format string` - Output format: `pretty|json` (default `"pretty"`)
 
 ---
 
-### 5. `envguard init`
-Initializes a new `.envguard.yaml` configuration file for your project. It automatically scans your primary programming language and pre-populates config rules based on your existing `.env` file keys.
-
+### 📝 Auto-Update Your `.env.example` Template
+Stop updating `.env.example` templates manually! Run this command to automatically read your `.env` file and generate a clean `.env.example` containing only the keys (values are safely stripped):
 ```bash
-envguard init [flags]
+envguard sync --force
 ```
-
-#### Flags
-- `--yes` - Skip interactive prompts and write default configuration values.
-- `--path string` - Path to initialize (default `"."`)
 
 ---
 
-### 6. `envguard validate`
-Validates `.env` variables against a schema defined in `.envguard.yaml`. It checks for missing required variables, incorrect types (string, number, boolean, url), and enum constraints.
-
+### 🩺 Run a Project Health Check
+To perform a structure audit of your environment file setup (making sure `.env` is inside `.gitignore` so you don't accidentally publish secrets, checking file integrity, etc.), run:
 ```bash
-envguard validate [flags]
+envguard doctor
 ```
-
-#### Flags
-- `--env string` - Path to `.env` file (default `".env"`)
-- `--config string` - Path to `.envguard.yaml` (default `".envguard.yaml"`)
-- `--format string` - Output format: `pretty|json` (default `"pretty"`)
-- `--ci` - Exits with status `1` if any validation checks fail.
 
 ---
 
-## Configuration Schema (`.envguard.yaml`)
+## ⚙️ Advanced Configuration (`.envguard.yaml`)
 
-Initialize a configuration file with `envguard init`. Below is an example `.envguard.yaml`:
+You can customize how `envguard` behaves by editing your `.envguard.yaml` file. Here is an example:
 
 ```yaml
 version: 1
@@ -170,22 +111,20 @@ scan:
     - "node_modules"
     - ".git"
     - "dist"
-    - "build"
-    - "vendor"
-    - ".goreleaser.yaml"
   languages:
-    - auto # Auto-detect project languages or specify ["javascript", "go", "python"]
+    - auto # Auto-detects JavaScript, TypeScript, Python, Go, Rust, Ruby, Dockerfiles, etc.
 
+# Define rules for validating values
 rules:
   DATABASE_URL:
     required: true
     type: url
-    description: "Primary database connection string"
+    description: "Primary PostgreSQL database URL"
   PORT:
     required: false
     type: number
     default: "3000"
-    description: "Server port"
+    description: "The port the web server runs on"
   NODE_ENV:
     required: true
     type: enum
@@ -193,20 +132,13 @@ rules:
       - development
       - production
       - test
-    description: "Application environment"
-
-output:
-  format: pretty
-  exit_code: true
 ```
 
 ---
 
-## Verification & CI Integration
+## 🤖 Integrate with GitHub Actions
 
-### GitHub Actions Workflow Example
-
-You can run `envguard` directly in your GitHub Actions workflows to block pull requests containing invalid configuration:
+Add `envguard` to your GitHub Actions workflow to block pull requests containing invalid or incomplete configurations:
 
 ```yaml
 name: Guard Environment
@@ -228,12 +160,24 @@ jobs:
           go-version: "1.22"
       - name: Install envguard
         run: go install github.com/Vamshavardhan50/envguard@latest
-      - name: Run audit in CI Mode
+      - name: Run audit
         run: envguard audit --ci --format github
 ```
 
 ---
 
-## License
+## 🙋 Frequently Asked Questions (FAQ)
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+### Does `envguard` send my secrets to a third-party server?
+**No.** `envguard` runs entirely on your local machine. It does not send any telemetry, analytics, or credentials over the internet.
+
+### What languages does the code scanner support?
+`envguard` scans JavaScript (`process.env.VAR`), TypeScript, React/Vue (`import.meta.env.VAR` or `process.env.VAR`), Python (`os.environ`), Go (`os.Getenv`), Ruby, Rust, PHP, Java, Shell scripts, and Dockerfiles out-of-the-box.
+
+### How is this different from other dotenv validators?
+Unlike most tools, `envguard` does not just check if a `.env` file exists. It **statically scans your source code files** to find what keys your code actually references, highlighting code references that are completely missing from your config.
+
+---
+
+## 📄 License
+This project is open-source software licensed under the [MIT License](LICENSE).
