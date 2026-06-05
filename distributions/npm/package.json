@@ -1,5 +1,5 @@
 {
-  "name": "envguard",
+  "name": "@vamsha50/envguard",
   "version": "1.0.0",
   "description": "The ESLint for environment variables.",
   "bin": {
