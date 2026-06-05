@@ -1,9 +1,9 @@
 # Binaries
-envguard
-envguard.exe
-envguard.test
-envguard.
-dist/
+/envguard
+/envguard.exe
+/envguard.test
+/envguard.
+/dist/
 
 # Test coverage
 *.out
@@ -19,3 +19,11 @@ dist/
 # OS files
 .DS_Store
 Thumbs.db
+
+# Python build and cache
+__pycache__/
+*.pyc
+*.egg-info/
+/distributions/pip/build/
+/distributions/pip/dist/
+
