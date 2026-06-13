@@ -1,4 +1,4 @@
-# Binaries
+# Compiled binaries
 /envguard
 /envguard.exe
 /envguard.test
@@ -16,6 +16,9 @@
 .env.test.local
 .env.production.local
 
+# Generated config (created by `envguard init`)
+.envguard.yaml
+
 # OS files
 .DS_Store
 Thumbs.db
@@ -27,3 +30,11 @@ __pycache__/
 /distributions/pip/build/
 /distributions/pip/dist/
 
+# Media / one-off files
+*.mp4
+*.mp3
+
+# Web presentation build artifacts
+/web-presentation/.next/
+/web-presentation/node_modules/
+/web-presentation/.env*.local

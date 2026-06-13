@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/envguard_banner.png" alt="envguard banner" width="100%">
+</p>
+
 # envguard 🛡️
 
 [![CI](https://github.com/Vamshavardhan50/envguard/actions/workflows/ci.yml/badge.svg)](https://github.com/Vamshavardhan50/envguard/actions/workflows/ci.yml)
@@ -7,6 +11,29 @@
 
 > **Think of `envguard` as a spell-checker/linter for your environment variables.**
 > It scans your code, checks your `.env` files, and makes sure you never break your app in production due to a missing or misconfigured setting. It is fast, works 100% offline, and requires zero configuration to start.
+
+---
+
+## 🔍 How it Works
+
+Unlike traditional validators that only verify `.env` files against static templates, `envguard` performs **static code analysis** to discover environment variables actually referenced in your source files, validating them directly.
+
+```mermaid
+flowchart TD
+    A[Start: envguard audit] --> B[Parse .envguard.yaml Config]
+    B --> C[Load .env File Key Names]
+    B --> D[Static Scan: Codebase Files]
+    D --> E[Detect Env Var Key Usages]
+    C --> F[Compare Engine]
+    E --> F
+    F --> G{Analysis Checks}
+    G -->|Used in code but not in .env| H[❌ Missing Variables]
+    G -->|In .env but not used in code| I[⚠️ Unused Variables]
+    G -->|Matches rules in yaml| J[✅ Validated Variables]
+    H --> K[Output Reports: pretty / json / github]
+    I --> K
+    J --> K
+```
 
 ---
 
@@ -47,6 +74,21 @@ Once installed, you can run it from any project folder:
 envguard init    # Set up your project (run once)
 envguard audit   # Scan your project for issues
 ```
+
+---
+
+## 🛡️ Why envguard?
+
+Traditional dotenv validators only check if files exist, often causing config drifts or shipping raw secrets. Here is how `envguard` elevates your workflow:
+
+| Feature | `envguard` 🛡️ | Standard `.env` Validators |
+| :--- | :--- | :--- |
+| **Static Code Scanning** | ✅ Yes (Auto-detects references in code) | ❌ No (Only compares `.env` with `.env.example`) |
+| **Privacy First** | ✅ Yes (Strictly reads key names, never logs secrets) | ⚠️ Partial (Often reads/outputs full secret values) |
+| **Multi-Language Support** | ✅ Yes (Go, Python, JS/TS, Ruby, Rust, PHP, Java, Shell, Docker) | ❌ No (Usually tied to a single language runtime) |
+| **Type & Enum Validation** | ✅ Yes (Configurable rules via YAML) | ⚠️ Limited (Requires runtime specific validator libraries) |
+| **Zero-Config Default** | ✅ Yes (Runs instantly out of the box) | ❌ No (Requires manually maintaining templates) |
+| **Offline Support** | ✅ Yes (100% offline, zero tracking) | ✅ Yes |
 
 ---
 
@@ -161,6 +203,14 @@ Unlike most tools, `envguard` does not just check if a `.env` file exists. It **
 
 ### I installed it with `npm install -g envguard-bin` but the command is not found. What do I do?
 Make sure your global npm bin folder is in your system `PATH`. You can find it by running `npm bin -g`. On Windows, this is usually `C:\Users\<YourName>\AppData\Roaming\npm`.
+
+---
+
+## 🌟 Star History & Support
+
+If you find `envguard` useful, please support the project by starring this repository! Your stars help keep the development of offline-first tools active and help other developers discover us.
+
+[![Star History Chart](https://api.star-history.com/svg?repos=Vamshavardhan50/envguard&type=Date)](https://star-history.com/#Vamshavardhan50/envguard&Date)
 
 ---
 
